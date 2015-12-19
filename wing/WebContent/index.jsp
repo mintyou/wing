@@ -9,11 +9,12 @@
 index.jsp  입니다.
 <img alt="" src="images/load.gif">
 	<script>
-		window.onload(gologin());
-		function gologin() {
-			location.href = "${context}/member/login.nhn";
+		
+		$(function() {
+			location.href = "${context}/member/loginForm.nhn";
 			
-		}
+		});
+		
 	</script>
 	
 	
