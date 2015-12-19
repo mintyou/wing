@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
+
 @WebServlet({ "/member/loginForm.nhn", "/member/login.nhn" })
 public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +21,7 @@ public class MemberController extends HttpServlet {
 		String path = request.getServletPath();
 		System.out.println("넘어온 경로 " + path);
 		RequestDispatcher dispatcher = null;
+		JSONObject obj  = new JSONObject();
 		switch (path) {
 		case "/member/loginForm.nhn":
 			dispatcher = request.getRequestDispatcher("/WEB-INF/views/member/login.jsp");
@@ -26,13 +29,18 @@ public class MemberController extends HttpServlet {
 			break;
 		case "/member/login.nhn":
 			MemberVO member = new MemberVO();
-			member.setName("홍길동");
-			member.setId("hong");
-			member.setPassword("1");
+			String id = request.getParameter("id");
+			String pw = request.getParameter("pw");
+			
+			member.setId(id);
+			member.setPassword(pw);
+			obj.put("id",member.getId());
+			obj.put("pw", member.getPassword());
 			request.setAttribute("member", member);
-			dispatcher = request.getRequestDispatcher("/WEB-INF/views/member/result.jsp");
-			dispatcher.forward(request, response);
-			break;
+			response.setContentType("application/x-json; charset=UTF-8");
+			response.getWriter().print(obj);
+			
+			return;
 
 		default:
 			break;

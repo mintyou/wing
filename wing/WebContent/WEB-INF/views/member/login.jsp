@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<jsp:include page="../global/header.jsp"></jsp:include>
-	<div class="container">
+<div id="header"></div>
+	<div id="container">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
 				<div class="login-panel panel panel-default">
@@ -27,28 +27,48 @@
 		</div>
 		<div id="join"></div>
 	</div>
-<jsp:include page="../global/footer.jsp"></jsp:include>	
+	<div id="footer"></div>
+<!--<jsp:include page="../global/footer.jsp"></jsp:include>	-->
 <script type="text/javascript" src="../js/member.js"></script>
 <script type="text/javascript">
 $(function() {
+	$("#header").load("${context}/global/header.nhn");
+	$("#footer").load("${context}/global/footer.nhn");
 	$("#login").click(function() {
 		member.login();
 	});
 });
 var member = {
 		login : function(){
-			var id = $("#id").val();
-		    var pw = $("#pw").val();
-		    var frm = $("#frm").val();
-		    var tags = $("div").val();
+			$.ajax({
+				url : '${context}/member/login.nhn',
+				data: {
+					id : $("#id").val(),
+					pw : $("#pw").val()
+				},
+				success : function(data) {
+					var result = '<h1>'+data.id+' 반갑습니다. 당신의 비번은 '+data.pw+'입니다. </h1>';
+					result += '<input type="button" value="뒤로가기" onclick="member.goBack()" />';
+					
+					$("#container").html(result);
+					
+				},
+				error : function(xhr,status,msg) {
+					alert('상태:'+status+',설명:'+msg);
+				}
+			});
+			
 		    
 
-		   location.href = "${context}/member/login.nhn";
+		   
 				
 			
 		},
 		join : function() {
 			location.href="join.html";
+		},
+		goBack : function() {
+			location.href = '${context}/member/loginForm.nhn';
 		}
 		};
 
