@@ -19,7 +19,7 @@ public class MemberVO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	private String name;
+	private Number name;
 	private String id;
 	private String password;
 	
